@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'image_event.dart';
 import 'image_state.dart';
@@ -8,6 +11,7 @@ import 'image_state.dart';
 class ImageBloc extends Bloc<ImageEvent, ImageState> {
   ImageBloc() : super(ImageState()) {
     _loadInitialImage();
+    on<UploadImageEvent>(_onUploadImage);
     on<SelectImageEvent>(_onSelectImage);
     on<LoadImageEvent>(_onLoadImage);
   }
@@ -25,6 +29,8 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
       final imagePath = pickedFile.path;
       await _saveImagePath(imagePath);
       emit(state.copyWith(imagePath: imagePath));
+
+      add(UploadImageEvent(File(imagePath)));
     }
   }
 
@@ -42,5 +48,22 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
   Future<String> _loadImagePath() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('imagePath') ?? '';
+  }
+
+  Future<void> _onUploadImage(
+      UploadImageEvent event, Emitter<ImageState> emit) async {
+    try {
+      final file = event.image;
+      final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      final storageRef =
+          FirebaseStorage.instance.ref().child('images/$fileName');
+
+      await storageRef.putFile(file);
+      final downloadUrl = await storageRef.getDownloadURL();
+
+      print('Uploaded image URL: $downloadUrl');
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
   }
 }
