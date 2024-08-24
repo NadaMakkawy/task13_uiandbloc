@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task13_uiandbloc/blocs/image/image_bloc.dart';
+import 'package:task13_uiandbloc/blocs/lecture/lecture_bloc.dart';
 
 import '../cubit/auth_cubit.dart';
 import '../firebase_options.dart';
@@ -33,6 +35,8 @@ void main() async {
     providers: [
       BlocProvider(create: (ctx) => AuthCubit()),
       BlocProvider(create: (ctx) => CourseBloc()),
+      BlocProvider(create: (ctx) => LectureBloc()),
+      BlocProvider(create: (ctx) => ImageBloc()),
     ],
     child: const MyApp(),
   ));
