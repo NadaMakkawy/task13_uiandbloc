@@ -14,3 +14,8 @@ class CourseOptionChosenEvent extends CourseEvent {
 
   CourseOptionChosenEvent(this.courseOptions);
 }
+
+class LectureChosenEvent extends CourseEvent {
+  final Lecture lecture;
+  LectureChosenEvent(this.lecture);
+}

@@ -3,10 +3,6 @@ import 'package:video_box/video_box.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/course/course_bloc.dart';
-
-import '../blocs/lecture/lecture_bloc.dart';
-import '../blocs/lecture/lecture_event.dart';
-import '../blocs/lecture/lecture_state.dart';
 import '../models/course.dart';
 import '../widgets/course_options_widgets.dart';
 import '../widgets/lecture_chips.dart';
@@ -34,7 +30,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     return Scaffold(
         body: Stack(
       children: [
-        BlocBuilder<LectureBloc, LectureState>(builder: (ctx, state) {
+        BlocBuilder<CourseBloc, CourseState>(builder: (ctx, state) {
+          if (state is! LectureState) return const SizedBox();
           var stateEx = state is LectureChosenState ? state : null;
           return SizedBox(
             height: 250,
@@ -102,7 +99,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       selectedOption:
                                           (state is CourseOptionStateChanges)
                                               ? state.courseOption
-                                              : null,
+                                              // : (state is LectureChosenState)
+                                              //     ? state.courseOption
+                                                  : null,
                                       onChanged: (courseOption) {
                                         context.read<CourseBloc>().add(
                                             CourseOptionChosenEvent(
@@ -123,7 +122,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                                     state.courseOption,
                                                 onLectureChosen: (lecture) {
                                                   context
-                                                      .read<LectureBloc>()
+                                                      .read<CourseBloc>()
                                                       .add(LectureChosenEvent(
                                                           lecture));
                                                 },

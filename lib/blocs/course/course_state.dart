@@ -10,3 +10,13 @@ class CourseOptionStateChanges extends CourseState {
 
   CourseOptionStateChanges(this.courseOption);
 }
+
+// for lectures
+class LectureState extends CourseState {}
+
+class LectureChosenState extends LectureState {
+  final Lecture lecture;
+  final CourseOptions courseOption;
+
+  LectureChosenState(this.lecture, this.courseOption);
+}

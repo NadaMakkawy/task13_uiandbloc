@@ -1,12 +1,3 @@
-// class ImageState {
-//   final String imageUrl;
-
-//   ImageState({this.imageUrl = ''});
-
-//   ImageState copyWith({String? imageUrl}) {
-//     return ImageState(imageUrl: imageUrl ?? this.imageUrl);
-//   }
-// }
 class ImageState {
   final String imagePath;
 
